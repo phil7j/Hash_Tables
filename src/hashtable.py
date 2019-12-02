@@ -1,6 +1,12 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+
+import hashlib
+
+hash_object = hash(b'Whats the meaning of life?')
+print(hash_object % 5)
+
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
