@@ -17,7 +17,7 @@ class HashTable:
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
         self.count = 0
-        self.load = self.count / self.capacity
+        self.load = 0
 
 
     def _hash(self, key):
@@ -58,12 +58,14 @@ class HashTable:
             self.resize()
         new_key = self._hash_mod(key)
         # Check if key already exists
-        if self.storage[new_key]:
+        # print("IT EXISTS HERE:", self.storage[new_key])
+        if self.storage[new_key] is not None:
             print("ERROR: This Key already exists")
             return
 
-        self.storage[index] = LinkedPair(key, value)
+        self.storage[new_key] = LinkedPair(key, value)
         self.count += 1
+        self.load = (self.count / self.capacity)
 
 
 
@@ -83,6 +85,7 @@ class HashTable:
         # Delete Key and lower count by 1
         self.storage[new_key] = None
         self.count -= 1
+        self.load = (self.count / self.capacity)
 
 
 
@@ -110,37 +113,50 @@ class HashTable:
         '''
         self.capacity *= 2
         new_storage = [None] * self.capacity
-        for i in range(self.storage):
-            new_storage[i] = self.storage[i]
+        for i in range(len(self.storage)):
+            if self.storage[i] is not None:
+                new_storage[i] = self.storage[i]
         self.storage = new_storage
+        self.load = (self.count / self.capacity)
 
+    def showit(self):
+        for i in range(len(self.storage)):
+            print(self.storage[i])
 
+ht = HashTable(4)
 
+ht.insert("line_1", "Tiny hash table")
+ht.insert("line_2", "Filled beyond capacity")
+ht.insert("line_3", "Linked list saves the day!")
+ht.showit()
+print("Capacity ",ht.capacity)
+print("Count ", ht.count)
+print("Load ",ht.load)
+# ht.retrieve("line_1")
+# if __name__ == "__main__":
+#     ht = HashTable(2)
 
-if __name__ == "__main__":
-    ht = HashTable(2)
+#     ht.insert("line_1", "Tiny hash table")
+#     ht.insert("line_2", "Filled beyond capacity")
+#     ht.insert("line_3", "Linked list saves the day!")
 
-    ht.insert("line_1", "Tiny hash table")
-    ht.insert("line_2", "Filled beyond capacity")
-    ht.insert("line_3", "Linked list saves the day!")
+#     print("")
 
-    print("")
+#     # Test storing beyond capacity
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
 
-    # Test storing beyond capacity
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+#     # Test resizing
+#     old_capacity = len(ht.storage)
+#     ht.resize()
+#     new_capacity = len(ht.storage)
 
-    # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
+#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+#     # Test if data intact after resizing
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
 
-    # Test if data intact after resizing
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
-
-    print("")
+#     print("")
