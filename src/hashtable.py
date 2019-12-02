@@ -2,11 +2,6 @@
 # Linked List hash table key/value pair
 # '''
 
-import hashlib
-
-hash_object = hash(b'Whats the meaning of life?')
-print(hash_object % 5)
-
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -21,6 +16,8 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        self.count = 0
+        self.load = self.count / self.capacity
 
 
     def _hash(self, key):
@@ -57,7 +54,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        if self.load >= 0.7:
+            self.resize()
+        new_key = self._hash_mod(key)
+        # Check if key already exists
+        if self.storage[new_key]:
+            print("ERROR: This Key already exists")
+            return
+
+        self.storage[index] = LinkedPair(key, value)
+        self.count += 1
+
 
 
 
@@ -69,7 +76,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        new_key = self._hash_mod(key)
+        if not self.storage[new_key]:
+            print("ERROR: This Key is not found")
+            return
+        # Delete Key and lower count by 1
+        self.storage[new_key] = None
+        self.count -= 1
+
 
 
     def retrieve(self, key):
@@ -80,7 +94,11 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        new_key = self._hash_mod(key)
+        if not self.storage[new_key]:
+            print("Error: This Key is not found.")
+            return None
+        return self.storage[new_key]
 
 
     def resize(self):
@@ -90,7 +108,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for i in range(self.storage):
+            new_storage[i] = self.storage[i]
+        self.storage = new_storage
+
 
 
 
