@@ -60,7 +60,7 @@ class HashTable:
         # Check if key already exists
         # print("IT EXISTS HERE:", self.storage[new_key])
         if self.storage[new_key] is not None:
-            print("ERROR: This Key already exists")
+            print(f"ERROR: This Key already exists, ({key},{value})")
             return
 
         self.storage[new_key] = LinkedPair(key, value)
@@ -101,6 +101,7 @@ class HashTable:
         if not self.storage[new_key]:
             print("Error: This Key is not found.")
             return None
+        print(f"({self.storage[new_key].key}, {self.storage[new_key].value})")
         return self.storage[new_key]
 
 
@@ -121,18 +122,21 @@ class HashTable:
 
     def showit(self):
         for i in range(len(self.storage)):
-            print(self.storage[i])
+            print(f"At index {i}, {self.storage[i]}")
 
 ht = HashTable(4)
 
 ht.insert("line_1", "Tiny hash table")
 ht.insert("line_2", "Filled beyond capacity")
 ht.insert("line_3", "Linked list saves the day!")
+ht.insert("line_4", "What will happen now!")
 ht.showit()
 print("Capacity ",ht.capacity)
 print("Count ", ht.count)
 print("Load ",ht.load)
-# ht.retrieve("line_1")
+ht.retrieve("line_5")
+
+
 # if __name__ == "__main__":
 #     ht = HashTable(2)
 
